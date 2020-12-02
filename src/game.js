@@ -1,4 +1,13 @@
 var scene;
+var Tools = {
+	ADD_NODE: 1,
+	SET_END: 2,
+	SET_START: 3,
+	DEFAULT: 0
+}
+var activeTool = 1;
+
+var multiplier = 1;
 
 var MainScene = new Phaser.Class({
 	Extends: Phaser.Scene,
@@ -9,6 +18,7 @@ var MainScene = new Phaser.Class({
 	preload: function () {
 		this.load.image('circle', 'assets/circle.png');
 	},
+
 
 	create: function () {
 		scene = this;
@@ -21,18 +31,20 @@ var MainScene = new Phaser.Class({
 		let circle = this.add.image(0, 0, 'circle').setOrigin(0.5).setScale(0.05);
 		
 		this.input.on('pointermove', (e) => {
-			if(isCreating) {
-				line.x2 = e.position.x;
-				line.y2 = e.position.y;
-				
-				tempGraphics.clear();
-				tempGraphics.strokeLineShape(line);
-			}
 			
-			else {
-				circle.x = e.position.x;
-				circle.y = e.position.y;
-			}
+				if(isCreating) {
+					line.x2 = e.position.x;
+					line.y2 = e.position.y;
+				
+					tempGraphics.clear();
+					tempGraphics.strokeLineShape(line);
+				}
+			
+				else {
+					circle.x = e.position.x;
+					circle.y = e.position.y;
+				}
+			
 		});
 		
 		this.input.on('pointerup', (e) => {
