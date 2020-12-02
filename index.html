@@ -2,9 +2,24 @@
     <head>
         <meta charset="utf-8">
         <title>Nice</title>
+		<script src="https://kit.fontawesome.com/a131cb3e00.js" crossorigin="anonymous"></script>
         <script type="text/javascript" src="src/phaser.js"></script>
+		<link rel="stylesheet" href="stylesheet.css">
     </head>
     <body>
+		<div class="toolbar">
+			<div class="addNode"><i class="fas fa-plus"></i></div>
+			<div class="startNode"><i class="fas fa-map-marker"></i></div>
+			<div class="endNode"><i class="fas fa-map-marker-alt"></i></div>
+			
+			<div class="nodeProperties">
+				<label class="container">
+					<input type="checkbox" id="eletricalRoad">
+					<span class="checkmark"></span>
+					<label>Use electric road</label>
+				</label>
+			</div>
+		</div>
 		<script type="text/javascript" src="src/node.js"></script>
 		<script type="text/javascript" src="src/game.js"></script>
     </body>
