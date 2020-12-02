@@ -1,3 +1,5 @@
+var scene;
+
 var MainScene = new Phaser.Class({
 	Extends: Phaser.Scene,
 	initialize: function MainScene() {
@@ -9,14 +11,14 @@ var MainScene = new Phaser.Class({
 	},
 
 	create: function () {
+		scene = this;
+		
 		let tempGraphics = this.add.graphics({lineStyle: {width: 2, color: 0xffffff}});
 		let permGraphics = this.add.graphics({lineStyle: {width: 2, color: 0xffffff}});
 		let line;
 		
-		
 		let isCreating = false;
-		let circle = this.add.image(0, 0, 'circle').setOrigin(0.5);
-		circle.setScale(0.05);
+		let circle = this.add.image(0, 0, 'circle').setOrigin(0.5).setScale(0.05);
 		
 		this.input.on('pointermove', (e) => {
 			if(isCreating) {
@@ -37,7 +39,9 @@ var MainScene = new Phaser.Class({
 			if(isCreating) {
 				isCreating = false;
 				circle.setAlpha(1);
-				this.add.image(e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
+				
+				let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
+				node.addVertex(line);
 				
 				permGraphics.strokeLineShape(line);
 				tempGraphics.clear();
@@ -47,10 +51,11 @@ var MainScene = new Phaser.Class({
 				isCreating = true;
 				circle.setAlpha(0);
 				
-				this.add.image(e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
-				
 				line = new Phaser.Geom.Line(e.position.x, e.position.y, e.position.x, e.position.y);
 				tempGraphics.strokeLineShape(line);
+				
+				let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
+				node.addVertex(line);
 			}
 		});
 	}
