@@ -8,7 +8,7 @@ class Node extends Phaser.GameObjects.Image {
 		this.setInteractive({cursor: 'pointer'});
 		this.on('pointerover', () => {
 			this.setTint('0xff0000');
-			console.log(currentConfig)
+	
 		});
 		
 		this.on('pointerout', () => {

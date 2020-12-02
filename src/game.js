@@ -5,7 +5,7 @@ var Tools = {
 	SET_START: 3,
 	DEFAULT: 0
 }
-var activeTool = 1;
+var activeTool = 0;
 
 var multiplier = 1;
 
@@ -31,7 +31,7 @@ var MainScene = new Phaser.Class({
 		let circle = this.add.image(0, 0, 'circle').setOrigin(0.5).setScale(0.05);
 		
 		this.input.on('pointermove', (e) => {
-			
+			if(activeTool == Tools.ADD_NODE){
 				if(isCreating) {
 					line.x2 = e.position.x;
 					line.y2 = e.position.y;
@@ -40,14 +40,15 @@ var MainScene = new Phaser.Class({
 					tempGraphics.strokeLineShape(line);
 				}
 			
-				else {
+				else  {
 					circle.x = e.position.x;
 					circle.y = e.position.y;
 				}
-			
+			}
 		});
 		
 		this.input.on('pointerup', (e) => {
+			if(activeTool == Tools.ADD_NODE){
 			if(isCreating) {
 				isCreating = false;
 				circle.setAlpha(1);
@@ -69,6 +70,7 @@ var MainScene = new Phaser.Class({
 				let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
 				node.addVertex(line);
 			}
+		}
 		});
 	}
 });

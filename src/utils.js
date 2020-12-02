@@ -33,21 +33,45 @@ function getDistance(pointA, pointB) {
 	return Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2));
 }
 
+var addNode = document.getElementById("addNode");
+var nodeProperties = document.getElementById("nodeProperties");
+var endNode = document.getElementById("endNode");
+var startNode = document.getElementById("startNode");
 
 function setNode(){
     activeTool = 1;
+
+    addNode.style.color = "#ed8d8d"
+    startNode.style.color = "#8d6262"
+    endNode.style.color = "#8d6262"
+
+    nodeProperties.style.opacity = "1.0"
+    nodeProperties.style.display = "block"
 }
 
-function setEnd(){
+function setFinish(){
+    endNode.style.color = "#ed8d8d"
+    nodeProperties.style.opacity = "1.0"
+    nodeProperties.style.display = "none"
+
+    addNode.style.color = "#8d6262"    
+    startNode.style.color = "#8d6262" 
+
     activeTool = 2;
 }
 
 function setStart(){
+    
+    startNode.style.color = "#ed8d8d"
+    endNode.style.color = "#8d6262"
+    addNode.style.color = "#8d6262"
+    nodeProperties.style.opacity = "1.0"
+    nodeProperties.style.display = "none"
     activeTool = 3;
 }
 
 function setElectrical() {
-    var checkBox = document.getElementById("electricalRoad");
+    var checkBox = document.getElementById("eletricalRoad");
 
     if (checkBox.checked == true){
       multiplier = -1;
