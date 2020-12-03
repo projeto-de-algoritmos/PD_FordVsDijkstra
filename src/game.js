@@ -56,12 +56,19 @@ var MainScene = new Phaser.Class({
 						let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
 						node.addVertex(this.line);
 					}
+					if(multiplier == -1){
+						console.log("Nani")
+						scene.permGraphics.lineStyle(2, 0xed8d8d);
+					} else {
+						scene.permGraphics.lineStyle(2, 0xffffff);
+					}
 					this.isCreating = false;					
 					this.permGraphics.strokeLineShape(this.line);
 					this.tempGraphics.clear();
 				} else if(!graphNotEmpty){
 					this.isCreating = true;
 					this.line = new Phaser.Geom.Line(e.position.x, e.position.y, e.position.x, e.position.y);
+					
 					this.tempGraphics.strokeLineShape(this.line);
 					let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
 					graphNotEmpty = true;

@@ -72,9 +72,10 @@ function setStart(){
 
 function setElectrical() {
     var checkBox = document.getElementById("eletricalRoad");
-
+    console.log(checkBox);
     if (checkBox.checked == true){
-      multiplier = -1;
+        console.log("pinto")
+        multiplier = -1;
     } else {
        multiplier = 1;
     }
