@@ -11,6 +11,8 @@ var multiplier = 1;
 
 var graphNotEmpty = false;
 
+var hoverOverNode = null;
+
 var MainScene = new Phaser.Class({
 	Extends: Phaser.Scene,
 	initialize: function MainScene() {
@@ -37,7 +39,6 @@ var MainScene = new Phaser.Class({
 				if(this.isCreating) {
 					this.line.x2 = e.position.x;
 					this.line.y2 = e.position.y;
-				
 					this.tempGraphics.clear();
 					this.tempGraphics.strokeLineShape(this.line);
 				}
@@ -47,21 +48,21 @@ var MainScene = new Phaser.Class({
 		this.input.on('pointerup', (e) => {
 			if(activeTool == Tools.ADD_NODE ){
 				if(this.isCreating) {
-					this.isCreating = false;
-				
-					let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
-					node.addVertex(this.line);
-				
+					if(hoverOverNode != null){
+						this.line.x2 = hoverOverNode.x;
+						this.line.y2 = hoverOverNode.y;
+						hoverOverNode.addVertex(this.line)
+					} else {
+						let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
+						node.addVertex(this.line);
+					}
+					this.isCreating = false;					
 					this.permGraphics.strokeLineShape(this.line);
 					this.tempGraphics.clear();
-				}
-			
-				else if(!graphNotEmpty){
+				} else if(!graphNotEmpty){
 					this.isCreating = true;
-			
 					this.line = new Phaser.Geom.Line(e.position.x, e.position.y, e.position.x, e.position.y);
 					this.tempGraphics.strokeLineShape(this.line);
-				
 					let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
 					graphNotEmpty = true;
 					node.addVertex(this.line);
