@@ -9,6 +9,8 @@ var activeTool = 0;
 
 var multiplier = 1;
 
+var graphNotEmpty = false;
+
 var MainScene = new Phaser.Class({
 	Extends: Phaser.Scene,
 	initialize: function MainScene() {
@@ -23,54 +25,48 @@ var MainScene = new Phaser.Class({
 	create: function () {
 		scene = this;
 		
-		let tempGraphics = this.add.graphics({lineStyle: {width: 2, color: 0xffffff}});
-		let permGraphics = this.add.graphics({lineStyle: {width: 2, color: 0xffffff}});
-		let line;
+		this.tempGraphics = this.add.graphics({lineStyle: {width: 2, color: 0xffffff}});
+		this.permGraphics = this.add.graphics({lineStyle: {width: 2, color: 0xffffff}});
+		this.line;
 		
-		let isCreating = false;
-		let circle = this.add.image(0, 0, 'circle').setOrigin(0.5).setScale(0.05);
+		this.isCreating = false;
+	
 		
 		this.input.on('pointermove', (e) => {
 			if(activeTool == Tools.ADD_NODE){
-				if(isCreating) {
-					line.x2 = e.position.x;
-					line.y2 = e.position.y;
+				if(this.isCreating) {
+					this.line.x2 = e.position.x;
+					this.line.y2 = e.position.y;
 				
-					tempGraphics.clear();
-					tempGraphics.strokeLineShape(line);
-				}
-			
-				else  {
-					circle.x = e.position.x;
-					circle.y = e.position.y;
+					this.tempGraphics.clear();
+					this.tempGraphics.strokeLineShape(this.line);
 				}
 			}
 		});
 		
 		this.input.on('pointerup', (e) => {
-			if(activeTool == Tools.ADD_NODE){
-			if(isCreating) {
-				isCreating = false;
-				circle.setAlpha(1);
+			if(activeTool == Tools.ADD_NODE ){
+				if(this.isCreating) {
+					this.isCreating = false;
 				
-				let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
-				node.addVertex(line);
+					let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
+					node.addVertex(this.line);
 				
-				permGraphics.strokeLineShape(line);
-				tempGraphics.clear();
-			}
+					this.permGraphics.strokeLineShape(this.line);
+					this.tempGraphics.clear();
+				}
 			
-			else {
-				isCreating = true;
-				circle.setAlpha(0);
+				else if(!graphNotEmpty){
+					this.isCreating = true;
+			
+					this.line = new Phaser.Geom.Line(e.position.x, e.position.y, e.position.x, e.position.y);
+					this.tempGraphics.strokeLineShape(this.line);
 				
-				line = new Phaser.Geom.Line(e.position.x, e.position.y, e.position.x, e.position.y);
-				tempGraphics.strokeLineShape(line);
-				
-				let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
-				node.addVertex(line);
+					let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
+					graphNotEmpty = true;
+					node.addVertex(this.line);
+				}
 			}
-		}
 		});
 	}
 });
