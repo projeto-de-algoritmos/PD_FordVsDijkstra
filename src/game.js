@@ -6,12 +6,11 @@ var Tools = {
 	DEFAULT: 0
 }
 var activeTool = 0;
-
 var multiplier = 1;
-
 var graphNotEmpty = false;
-
 var hoverOverNode = null;
+var selectedNode = null;
+var graph = new UndirectedGraph();
 
 var MainScene = new Phaser.Class({
 	Extends: Phaser.Scene,
@@ -46,22 +45,34 @@ var MainScene = new Phaser.Class({
 		});
 		
 		this.input.on('pointerup', (e) => {
-			if(activeTool == Tools.ADD_NODE ){
+			if(activeTool == Tools.ADD_NODE ) {
 				if(this.isCreating) {
-					if(hoverOverNode != null){
+					if(hoverOverNode != null) {
 						this.line.x2 = hoverOverNode.x;
 						this.line.y2 = hoverOverNode.y;
-						hoverOverNode.addVertex(this.line)
+						hoverOverNode.addEdge(this.line);
+						
+						if(multiplier == -1)
+							graph.addEdge(hoverOverNode.id, selectedNode, -Phaser.Geom.Line.Length(this.line));
+						else
+							graph.addEdge(hoverOverNode.id, selectedNode, Phaser.Geom.Line.Length(this.line));
 					} else {
-						let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
-						node.addVertex(this.line);
+						let node = new Node(this, e.position.x, e.position.y, 'circle', graph.size).setOrigin(0.5).setScale(0.05);
+						node.addEdge(this.line);
+						
+						graph.addVertex(graph.size);
+						if(multiplier == -1)
+							graph.addEdge(node.id, selectedNode, -Phaser.Geom.Line.Length(this.line));
+						else
+							graph.addEdge(node.id, selectedNode, Phaser.Geom.Line.Length(this.line));
 					}
-					if(multiplier == -1){
-						console.log("Nani")
+					
+					if(multiplier == -1) {
 						scene.permGraphics.lineStyle(2, 0xed8d8d);
 					} else {
 						scene.permGraphics.lineStyle(2, 0xffffff);
 					}
+					
 					this.isCreating = false;					
 					this.permGraphics.strokeLineShape(this.line);
 					this.tempGraphics.clear();
@@ -70,9 +81,13 @@ var MainScene = new Phaser.Class({
 					this.line = new Phaser.Geom.Line(e.position.x, e.position.y, e.position.x, e.position.y);
 					
 					this.tempGraphics.strokeLineShape(this.line);
-					let node = new Node(this, e.position.x, e.position.y, 'circle').setOrigin(0.5).setScale(0.05);
+					let node = new Node(this, e.position.x, e.position.y, 'circle', graph.size).setOrigin(0.5).setScale(0.05);
+					
+					selectedNode = graph.size;
+					graph.addVertex(graph.size);
+					
 					graphNotEmpty = true;
-					node.addVertex(this.line);
+					node.addEdge(this.line);
 				}
 			}
 		});

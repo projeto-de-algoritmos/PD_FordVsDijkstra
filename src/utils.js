@@ -1,10 +1,12 @@
 class WeightedGraph {
 	constructor() {
 		this.adjList = new Map();
+		this.size = 0;
 	}
 	
 	addVertex(v, info = {}) {
 		this.adjList.set(v, {...info, edges: []});
+		this.size++;
 	}
 	
 	getVertex(v) {
@@ -37,6 +39,15 @@ var addNode = document.getElementById("addNode");
 var nodeProperties = document.getElementById("nodeProperties");
 var endNode = document.getElementById("endNode");
 var startNode = document.getElementById("startNode");
+
+function resetTools() {
+	startNode.style.color = "#8d6262"
+    startNode.style.color = "#8d6262"
+    endNode.style.color = "#8d6262"
+	nodeProperties.style.opacity = "1.0"
+    nodeProperties.style.display = "none"
+	activeTool = 0;
+}
 
 function setNode(){
     activeTool = 1;
@@ -72,9 +83,8 @@ function setStart(){
 
 function setElectrical() {
     var checkBox = document.getElementById("eletricalRoad");
-    console.log(checkBox);
+	
     if (checkBox.checked == true){
-        console.log("pinto")
         multiplier = -1;
     } else {
        multiplier = 1;

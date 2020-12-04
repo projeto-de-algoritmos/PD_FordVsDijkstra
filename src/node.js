@@ -1,9 +1,10 @@
 class Node extends Phaser.GameObjects.Image {
-	constructor(scene, x, y, texture) {
+	constructor(scene, x, y, texture, id) {
 		super(scene, x, y, texture);
 		scene.children.add(this);
 		
-		this.vertex = [];
+		this.edge = [];
+		this.id = id;
 		
 		this.setInteractive({cursor: 'pointer'});
 		this.on('pointerover', () => {
@@ -17,14 +18,18 @@ class Node extends Phaser.GameObjects.Image {
 		});
 
 		this.on('pointerdown', (e) => {
-			scene.line = new Phaser.Geom.Line(e.position.x, e.position.y, e.position.x, e.position.y);
-			scene.tempGraphics.strokeLineShape(scene.line);
-			this.addVertex(scene.line);
-			scene.isCreating = true;
+			if(activeTool == Tools.ADD_NODE) {
+				scene.line = new Phaser.Geom.Line(e.position.x, e.position.y, e.position.x, e.position.y);
+				scene.tempGraphics.strokeLineShape(scene.line);
+				this.addEdge(scene.line);
+				scene.isCreating = true;
+				
+				selectedNode = this.id;
+			}
 		})
 	}
 	
-	addVertex(line) {
-		this.vertex.push(line);
+	addEdge(line) {
+		this.edge.push(line);
 	}
 }
