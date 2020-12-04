@@ -15,6 +15,9 @@ var graph = new DirectedGraph();
 var start_node = null;
 var last_node = null;
 
+var dijkstraCost = 0;
+var bellmanCost = 0;
+
 var MainScene = new Phaser.Class({
 	Extends: Phaser.Scene,
 	initialize: function MainScene() {
@@ -38,7 +41,8 @@ var MainScene = new Phaser.Class({
 		this.line;
 		
 		this.isCreating = false;
-	
+		
+		
 		
 		this.input.on('pointermove', (e) => {
 			if(activeTool == Tools.ADD_NODE){
@@ -67,7 +71,7 @@ var MainScene = new Phaser.Class({
 						let node = new Node(this, e.position.x, e.position.y, 'circle', graph.size).setOrigin(0.5).setScale(0.05);
 						node.addEdge(this.line);
 						
-						graph.addVertex(graph.size, {x: e.position.x, y: e.position.y, id:graph.size});
+						graph.addVertex(graph.size, {x: e.position.x, y: e.position.y});
 						if(multiplier == -1)
 							graph.addEdge(selectedNode, node.id, -Phaser.Geom.Line.Length(this.line));
 						else
@@ -95,7 +99,7 @@ var MainScene = new Phaser.Class({
 					let node = new Node(this, e.position.x, e.position.y, 'circle', graph.size).setOrigin(0.5).setScale(0.05);
 					
 					selectedNode = graph.size;
-					graph.addVertex(graph.size, {x: e.position.x, y: e.position.y, id: graph.size});
+					graph.addVertex(graph.size, {x: e.position.x, y: e.position.y});
 					
 					graphNotEmpty = true;
 					node.addEdge(this.line);

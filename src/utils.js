@@ -1,4 +1,6 @@
 let INF = 9999999999;
+var resultBellman;
+var resultDijkstra;
 class WeightedGraph {
 	constructor() {
 		this.adjList = new Map();
@@ -122,8 +124,11 @@ function dijkstra(graph, start_node, last_node) {
 				distance[edge.edge] = cost;
 				previous[edge.edge] = current_node.index;
 
-				if(edge.edge == last_node)
+				if(edge.edge == last_node){
 					nodeFound = true;
+					dijkstraCost = cost;
+				}
+					
 				
 				priority_queue.push({index: edge.edge, node: graph.getVertex(edge.edge), priority: cost});
 			}
@@ -188,6 +193,7 @@ function bellmanFord(graph, start_node, last_node){
 	}
 		
 	else{
+		bellmanCost = distance[last_node];
 		while(target != null){
 			path.unshift(target);
 			target = predecessor[target]
@@ -214,10 +220,7 @@ function setPlayButton(scene) {
 	setPlayButton.play_button.on('pointerup', () => {
 		let bellmanFordPath = bellmanFord(graph, start_node.id, last_node.id);
 		let dijkstraPath = dijkstra(graph, start_node.id, last_node.id)
-		
-		console.log(bellmanFordPath)
-		console.log(dijkstraPath)
-		
+
 		let bellmanNode = graph.getVertex(bellmanFordPath.shift());
 		let dijkstraNode = graph.getVertex(dijkstraPath.shift());
 		
@@ -240,9 +243,6 @@ function setPlayButton(scene) {
 				
 				while(bellmanFordPath.length) {
 					bellmanNextNode = graph.getVertex(bellmanFordPath.shift());
-					
-					console.log('node ', bellmanNode)
-					console.log('nextnode ', bellmanNextNode)
 					
 					bellmanTweens.add({
 						targets: setPlayButton.bellmanCar,
@@ -271,6 +271,14 @@ function setPlayButton(scene) {
 				
 				bellmanTweens.play();
 				dijkstraTweens.play();
+				if(resultBellman || resultDijkstra){
+					resultBellman.destroy();
+					resultDijkstra.destroy();
+				}
+					
+				resultBellman = scene.add.text(0, 680, "Bellman-Ford total weight: "+ bellmanCost.toFixed(3), { font: "20px Arial", fill: "#ffffff", align: "center" });
+				resultDijkstra = resultBellman = scene.add.text(0, 700, "Dijkstra total weight: "+ dijkstraCost.toFixed(3), { font: "20px Arial", fill: "#ffffff", align: "center" });
+				
 			}
 			
 			else
