@@ -6,6 +6,7 @@ class WeightedGraph {
 		this.size = 0;
 		this.edges = 0;
 		this.hasCycle = false;
+		this.lowestWeight = 0;
 	}
 	
 	addVertex(v, info = {}) {
@@ -23,12 +24,14 @@ class WeightedGraph {
 }
 
 
-class UndirectedGraph extends WeightedGraph {
+class DirectedGraph extends WeightedGraph {
 	addEdge(v1, v2, weight) {
 		this.adjList.get(v1).edges.push({edge: v2, weight: weight});
-		this.adjList.get(v2).edges.push({edge: v1, weight: weight});
-		this.edgeList.push({src: v2, dest: v1, weight: weight});
+		this.edgeList.push({src: v1, dest: v2, weight: weight});
 		this.edges++;
+		
+		if(weight < this.lowestWeight)
+			this.lowestWeight = weight;
 	}
 }
 
@@ -92,15 +95,16 @@ function setElectrical() {
     }
 }
 
-var priority_queue;
-
 function dijkstra(graph, start_node, last_node) {
-	priority_queue = new Heapify(100);
+	let priority_queue = new TinyQueue([], function (a, b) {
+		return a.priority - b.priority;
+	});
 	let distance = {};
 	let previous = {};
+	let nodeFound = false;
 
 	distance[start_node] = 0;
-	priority_queue.push({index: start_node, node: graph.getVertex(start_node)}, 1);
+	priority_queue.push({index: start_node, node: graph.getVertex(start_node), priority: 0});
 
 	graph.adjList.forEach((node, index) => {
 		if(index != start_node)
@@ -108,19 +112,25 @@ function dijkstra(graph, start_node, last_node) {
 		previous[index] = null;
 	});
 
-	while(priority_queue.size) {
+	while(priority_queue.length) {
 		let current_node = priority_queue.pop();
 
-		current_node.node.edges.forEach((edge) => {
+		for(edge of current_node.node.edges) {
 			let cost = edge.weight + distance[current_node.index];
 
 			if(cost < distance[edge.edge]) {
 				distance[edge.edge] = cost;
 				previous[edge.edge] = current_node.index;
 
-				priority_queue.push({index: edge.edge, node: graph.getVertex(edge.edge)}, cost);
+				if(edge.edge == last_node)
+					nodeFound = true;
+				
+				priority_queue.push({index: edge.edge, node: graph.getVertex(edge.edge), priority: cost});
 			}
-		});
+		}
+		
+		if(nodeFound)
+			break;
 	}
 
 	let best_path = [last_node];
@@ -170,12 +180,12 @@ function bellmanFord(graph, start_node, last_node){
 	}
 
 	if(graph.hasCycle){
-		console.log("Ciclo negativo");
+		alert("Ciclo negativo");
 	}
 		
 	else{
 		while(target != null){
-			path.push(target);
+			path.unshift(target);
 			target = predecessor[target]
 		}
 	}

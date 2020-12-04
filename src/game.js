@@ -10,7 +10,7 @@ var multiplier = 1;
 var graphNotEmpty = false;
 var hoverOverNode = null;
 var selectedNode = null;
-var graph = new UndirectedGraph();
+var graph = new DirectedGraph();
 
 var MainScene = new Phaser.Class({
 	Extends: Phaser.Scene,
@@ -53,18 +53,18 @@ var MainScene = new Phaser.Class({
 						hoverOverNode.addEdge(this.line);
 						
 						if(multiplier == -1)
-							graph.addEdge(hoverOverNode.id, selectedNode, -Phaser.Geom.Line.Length(this.line));
+							graph.addEdge(selectedNode, hoverOverNode.id, -Phaser.Geom.Line.Length(this.line));
 						else
-							graph.addEdge(hoverOverNode.id, selectedNode, Phaser.Geom.Line.Length(this.line));
+							graph.addEdge(selectedNode, hoverOverNode.id, Phaser.Geom.Line.Length(this.line));
 					} else {
 						let node = new Node(this, e.position.x, e.position.y, 'circle', graph.size).setOrigin(0.5).setScale(0.05);
 						node.addEdge(this.line);
 						
 						graph.addVertex(graph.size);
 						if(multiplier == -1)
-							graph.addEdge(node.id, selectedNode, -Phaser.Geom.Line.Length(this.line));
+							graph.addEdge(selectedNode, node.id, -Phaser.Geom.Line.Length(this.line));
 						else
-							graph.addEdge(node.id, selectedNode, Phaser.Geom.Line.Length(this.line));
+							graph.addEdge(selectedNode, node.id, Phaser.Geom.Line.Length(this.line));
 					}
 					
 					if(multiplier == -1) {
