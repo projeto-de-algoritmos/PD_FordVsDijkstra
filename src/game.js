@@ -24,6 +24,9 @@ var MainScene = new Phaser.Class({
 	preload: function () {
 		this.load.image('circle', 'assets/circle.png');
 		this.load.image('arrow', 'assets/arrow.png');
+		this.load.image('play', 'assets/play.png');
+		this.load.image('bball', 'assets/bball.png');
+		this.load.image('dball', 'assets/dball.png');
 	},
 
 
@@ -64,7 +67,7 @@ var MainScene = new Phaser.Class({
 						let node = new Node(this, e.position.x, e.position.y, 'circle', graph.size).setOrigin(0.5).setScale(0.05);
 						node.addEdge(this.line);
 						
-						graph.addVertex(graph.size);
+						graph.addVertex(graph.size, {x: e.position.x, y: e.position.y, id:graph.size});
 						if(multiplier == -1)
 							graph.addEdge(selectedNode, node.id, -Phaser.Geom.Line.Length(this.line));
 						else
@@ -92,7 +95,7 @@ var MainScene = new Phaser.Class({
 					let node = new Node(this, e.position.x, e.position.y, 'circle', graph.size).setOrigin(0.5).setScale(0.05);
 					
 					selectedNode = graph.size;
-					graph.addVertex(graph.size);
+					graph.addVertex(graph.size, {x: e.position.x, y: e.position.y, id: graph.size});
 					
 					graphNotEmpty = true;
 					node.addEdge(this.line);

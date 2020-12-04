@@ -35,6 +35,9 @@ class Node extends Phaser.GameObjects.Image {
 				this.color = 0xed8d8d;
 				this.setTint(this.color);
 				resetTools();
+				
+				if(last_node)
+					setPlayButton(scene);
 			} else if(activeTool == Tools.SET_END){
 				if(last_node){
 					last_node.color = 0xffffff;
@@ -45,6 +48,9 @@ class Node extends Phaser.GameObjects.Image {
 				this.color = 0x8d6262;
 				this.setTint(this.color);
 				resetTools();
+				
+				if(start_node)
+					setPlayButton(scene);
 			}
 		})
 	}

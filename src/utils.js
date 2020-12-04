@@ -135,8 +135,12 @@ function dijkstra(graph, start_node, last_node) {
 
 	let best_path = [last_node];
 
-	while(best_path[0] != start_node)
+	while(best_path[0] != start_node) {
+		if(previous[best_path[0]] == null)
+			return [];
+		
 		best_path.unshift(previous[best_path[0]]);
+	}
 
 	return best_path;
 }
@@ -180,7 +184,7 @@ function bellmanFord(graph, start_node, last_node){
 	}
 
 	if(graph.hasCycle){
-		alert("Ciclo negativo");
+		console.log("Ciclo negativo");
 	}
 		
 	else{
@@ -190,4 +194,90 @@ function bellmanFord(graph, start_node, last_node){
 		}
 	}
 	return path;
+}
+
+function setPlayButton(scene) {
+	if(setPlayButton.play_button)
+		return;
+	
+	setPlayButton.play_button = scene.add.image(640, 710, 'play').setOrigin(0.5, 1).setScale(0.5);
+	setPlayButton.play_button.setInteractive();
+	
+	setPlayButton.play_button.on('pointerover', () => {
+		setPlayButton.play_button.setTint(0xed8d8d);
+	});
+	
+	setPlayButton.play_button.on('pointerout', () => {
+		setPlayButton.play_button.clearTint();
+	});
+	
+	setPlayButton.play_button.on('pointerup', () => {
+		let bellmanFordPath = bellmanFord(graph, start_node.id, last_node.id);
+		let dijkstraPath = dijkstra(graph, start_node.id, last_node.id)
+		
+		console.log(bellmanFordPath)
+		console.log(dijkstraPath)
+		
+		let bellmanNode = graph.getVertex(bellmanFordPath.shift());
+		let dijkstraNode = graph.getVertex(dijkstraPath.shift());
+		
+		let bellmanNextNode;
+		let dijkstraNextNode;
+		
+		let bellmanTweens = scene.tweens.createTimeline();
+		let dijkstraTweens = scene.tweens.createTimeline();
+		
+		if(dijkstraPath.length) {
+			if(bellmanFordPath.length) {
+				if(setPlayButton.carOne) {
+					setPlayButton.carOne.destroy();
+					setPlayButton.carTwo.destroy();
+				}
+				
+				setPlayButton.bellmanCar = scene.add.image(start_node.x, start_node.y, 'bball');
+				setPlayButton.dijkstraCar = scene.add.image(start_node.x, start_node.y, 'dball');
+				
+				
+				while(bellmanFordPath.length) {
+					bellmanNextNode = graph.getVertex(bellmanFordPath.shift());
+					
+					console.log('node ', bellmanNode)
+					console.log('nextnode ', bellmanNextNode)
+					
+					bellmanTweens.add({
+						targets: setPlayButton.bellmanCar,
+						duration: getDistance({x: bellmanNode.x, y: bellmanNode.y}, {x: bellmanNextNode.x, y: bellmanNextNode.y})/0.1,
+						x: bellmanNextNode.x,
+						y: bellmanNextNode.y,
+						paused: true
+					});
+					
+					bellmanNode = bellmanNextNode;
+				}
+				
+				while(dijkstraPath.length) {
+					dijkstraNextNode = graph.getVertex(dijkstraPath.shift());
+					
+					dijkstraTweens.add({
+						targets: setPlayButton.dijkstraCar,
+						duration: getDistance({x: dijkstraNode.x, y: dijkstraNode.y}, {x: dijkstraNextNode.x, y: dijkstraNextNode.y})/0.1,
+						x: dijkstraNextNode.x,
+						y: dijkstraNextNode.y,
+						paused: true
+					});
+					
+					dijkstraNode = dijkstraNextNode;
+				}
+				
+				bellmanTweens.play();
+				dijkstraTweens.play();
+			}
+			
+			else
+				alert('Negative cycle found!');
+		}
+		
+		else
+			alert('Unreachable last node or start node and last node are the same!');
+	});
 }
