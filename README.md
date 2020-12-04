@@ -1,32 +1,37 @@
-
-
-# Way of the Pathfinder
+# Ford vs Dijkstra
 
 **Número da Lista**: 5<br>
-**Conteúdo da Disciplina**: Programacção dinâmica<br>
+**Conteúdo da Disciplina**: Programação dinâmica<br>
 
 ## Alunos
 |Matrícula | Aluno |
 | -- | -- |
-| 17/0102343  |  Eduardo Vieira Lima |
+| 17/0102343  | Eduardo Vieira Lima |
 | 17/0114040  | Samuel de Souza Buters Pereira |
 
 ## Sobre 
-Descreva os objetivos do seu projeto e como ele funciona. 
+Ford vs Dijkstra consiste de um simulador o qual simula de forma visual o caminho tomado pelos algoritmos de melhor caminho do Dijkstra e Bellman-Ford.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+![](https://i.imgur.com/IXsnEoX.png)
+![](https://i.imgur.com/rXe82rR.png)
+![](https://i.imgur.com/P5ANVcr.png)
 
 ## Instalação 
-**Linguagem**: xxxxxx<br>
-**Framework**: (caso exista)<br>
-Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
+**Linguagem**: Javascript<br>
+**Framework**: Phaser<br>
+É recomendado ter python instalado, embora outra ferramenta para web server local possa ser utilizada para subir a aplicação localmente.
 
 ## Uso 
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+Para executar localmente via python
+```python -m http.server 3000```
+
+A aplicação será executada em localhost:3000.
+
+A aplicação também está disponível em: https://fordvsdijkstra.netlify.app/
 
 ## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
+São utilizados os algoritmos de Dijkstra e Bellman-Ford.
 
 
 
