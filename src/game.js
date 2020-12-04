@@ -20,6 +20,7 @@ var MainScene = new Phaser.Class({
 
 	preload: function () {
 		this.load.image('circle', 'assets/circle.png');
+		this.load.image('arrow', 'assets/arrow.png');
 	},
 
 
@@ -67,10 +68,14 @@ var MainScene = new Phaser.Class({
 							graph.addEdge(selectedNode, node.id, Phaser.Geom.Line.Length(this.line));
 					}
 					
+					let middle_point = Phaser.Geom.Line.GetMidPoint(this.line);
+					
 					if(multiplier == -1) {
 						scene.permGraphics.lineStyle(2, 0xed8d8d);
+						this.add.image(middle_point.x, middle_point.y, 'arrow').setOrigin(0.5).setAngle(Phaser.Geom.Line.Angle(this.line) * 57.2958).setTint(0xed8d8d);
 					} else {
 						scene.permGraphics.lineStyle(2, 0xffffff);
+						this.add.image(middle_point.x, middle_point.y, 'arrow').setOrigin(0.5).setAngle(Phaser.Geom.Line.Angle(this.line) * 57.2958).setTint(0xffffff);
 					}
 					
 					this.isCreating = false;					
