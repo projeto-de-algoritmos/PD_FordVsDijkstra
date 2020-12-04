@@ -1,7 +1,11 @@
+let INF = 9999999999;
 class WeightedGraph {
 	constructor() {
 		this.adjList = new Map();
+		this.edgeList = [];
 		this.size = 0;
+		this.edges = 0;
+		this.hasCycle = false;
 	}
 	
 	addVertex(v, info = {}) {
@@ -18,16 +22,13 @@ class WeightedGraph {
 	}
 }
 
+
 class UndirectedGraph extends WeightedGraph {
 	addEdge(v1, v2, weight) {
 		this.adjList.get(v1).edges.push({edge: v2, weight: weight});
 		this.adjList.get(v2).edges.push({edge: v1, weight: weight});
-	}
-}
-
-class DirectedGraph extends WeightedGraph {	
-	addEdge(v1, v2, weight) {
-		this.adjList.get(v1).edges.push({edge: v2, weight: weight});
+		this.edgeList.push({src: v2, dest: v1, weight: weight});
+		this.edges++;
 	}
 }
 
@@ -91,8 +92,10 @@ function setElectrical() {
     }
 }
 
+var priority_queue;
+
 function dijkstra(graph, start_node, last_node) {
-	let priority_queue = new Heapify(graph.getSize());
+	priority_queue = new Heapify(100);
 	let distance = {};
 	let previous = {};
 
@@ -126,4 +129,55 @@ function dijkstra(graph, start_node, last_node) {
 		best_path.unshift(previous[best_path[0]]);
 
 	return best_path;
+}
+
+function bellmanFord(graph, start_node, last_node){
+	let distance = {};
+	let predecessor = {};
+	let path = [];
+	let target = last_node;
+
+	for(let i = 0; i < graph.size; i++){
+		distance[i] = INF;
+	}
+	distance[start_node] = 0;
+
+	for(let i = 1; i < graph.size; i++){
+		for(let j = 0; j < graph.edges; j++){
+			let edge = graph.edgeList[j]
+			let u = edge.src;
+			let v = edge.dest;
+			let w = edge.weight;
+
+			if(distance[u] != INF && distance[u] + w < distance[v]){
+				distance[v] = distance[u] + w;
+				predecessor[v] = u;
+			}
+		}
+	}
+
+	for(let i = 0; i < graph.edges; i ++){
+		let edge = graph.edgeList[i]
+		let u = edge.src;
+		let v = edge.dest;
+		let w = edge.weight;
+		
+		if(distance[u] != INF && distance[u] + w < distance[v]){
+			
+			graph.hasCycle = true;
+		}
+				
+	}
+
+	if(graph.hasCycle){
+		console.log("Ciclo negativo");
+	}
+		
+	else{
+		while(target != null){
+			path.push(target);
+			target = predecessor[target]
+		}
+	}
+	return path;
 }
