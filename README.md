@@ -28,7 +28,9 @@ Para executar localmente via python
 
 A aplicação será executada em localhost:3000.
 
-A aplicação também está disponível em: https://fordvsdijkstra.netlify.app/
+A aplicação também está disponível nos seguintes links: </br>
+https://fordvsdijkstra.netlify.app/ </br>
+https://projeto-de-algoritmos.github.io/PD_FordVsDijkstra/
 
 ## Outros 
 São utilizados os algoritmos de Dijkstra e Bellman-Ford.
