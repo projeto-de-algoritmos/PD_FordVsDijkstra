@@ -2,7 +2,7 @@ class Node extends Phaser.GameObjects.Image {
 	constructor(scene, x, y, texture, id) {
 		super(scene, x, y, texture);
 		scene.children.add(this);
-		
+		this.color = 0xffffff;
 		this.edge = [];
 		this.id = id;
 		
@@ -13,7 +13,7 @@ class Node extends Phaser.GameObjects.Image {
 		});
 		
 		this.on('pointerout', () => {
-			this.clearTint();
+			this.setTint(this.color);
 			hoverOverNode = null;
 		});
 
@@ -25,6 +25,26 @@ class Node extends Phaser.GameObjects.Image {
 				scene.isCreating = true;
 				
 				selectedNode = this.id;
+			} else if(activeTool == Tools.SET_START){
+				if(start_node){
+					start_node.color = 0xffffff;
+					start_node.clearTint();
+				}
+					
+				start_node = this;
+				this.color = 0xed8d8d;
+				this.setTint(this.color);
+				resetTools();
+			} else if(activeTool == Tools.SET_END){
+				if(last_node){
+					last_node.color = 0xffffff;
+					last_node.clearTint();
+				}
+					
+				last_node = this;
+				this.color = 0x8d6262;
+				this.setTint(this.color);
+				resetTools();
 			}
 		})
 	}

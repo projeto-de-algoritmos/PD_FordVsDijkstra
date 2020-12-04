@@ -12,6 +12,9 @@ var hoverOverNode = null;
 var selectedNode = null;
 var graph = new DirectedGraph();
 
+var start_node = null;
+var last_node = null;
+
 var MainScene = new Phaser.Class({
 	Extends: Phaser.Scene,
 	initialize: function MainScene() {
